@@ -164,22 +164,22 @@ const Sidebar = () => {
                         selected={selected}
                         setSelected={setSelected}
                     />
-                    {/* {Topic BERT} */}
+                    {/* {RESULT BERT} */}
                     <Item 
-                        title="BERT Topic Prediction"
-                        to="/topic"
+                        title="BERT Prediction Result"
+                        to="/result"
                         icon={<ModelTrainingOutlinedIcon />}
                         selected={selected}
                         setSelected={setSelected}
                     />
                     {/* { Sentiment Analysis } */}
-                    <Item 
+                    {/* <Item 
                         title="BERT Sentiment Analysis Prediction"
                         to="/sentiment"
                         icon={<SentimentSatisfiedOutlinedIcon />}
                         selected={selected}
                         setSelected={setSelected}
-                    />
+                    /> */}
                     <Item 
                         title="Profile Form"
                         to="/form"

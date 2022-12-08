@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { Formik } from "formik";
@@ -7,15 +8,43 @@ import Header from "../../components/Header";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import * as yup from "yup";
+import { useEffect, useState } from 'react';
+import { Link } from "react-router-dom";
+import moment from "moment";
+import {useNavigate} from 'react-router-dom';
+
+
+
+
+const baseUrl = "http://localhost:5000"
 
 
 
 const CreateComment = () => {
+
+  const navigate = useNavigate();
+
+  const [comment, setComment] = useState("");
+
+  const handleChange = e => {
+    setComment(e.target.value);
+    
+  }
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  const handleFormSubmit = (values) => {
-    console.log(values);
+  const handleFormSubmit = async (values) => {
+    setComment(values);
+    console.log('DATA', values);
+    const data = await axios.post(`${baseUrl}/create_comment`, values);
+    // 👇️ redirect to /comments
+    navigate('/comments');
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+   // setComment('');
   }
 
   return (
@@ -34,8 +63,8 @@ const CreateComment = () => {
                     values, 
                     errors, 
                     touched, 
+                    handleChange,
                     handleBlur, 
-                    handleChange, 
                     handleSubmit 
                 }) => (
                     <form onSubmit={handleSubmit}>
@@ -44,6 +73,32 @@ const CreateComment = () => {
                             gap="30px" 
                             gridTemplateColumns="repeat(4, minmax(0, 1fr))"
                         >
+                            <TextField
+                                fullWidth
+                                variant="filled"
+                                type="text"
+                                label="Name"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.name}
+                                name='name'
+                                error={!!touched.name && !!errors.name}
+                                helperText={touched.name && errors.name}
+                                sx={{ gridColumn: "span 2" }}
+                            />
+                            <TextField
+                                fullWidth
+                                variant="filled"
+                                type="text"
+                                label="Date"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.date}
+                                name="date"
+                                error={!!touched.date && !!errors.date}
+                                helperText={touched.date && errors.date}
+                                sx={{ gridColumn: "span 2" }}
+                            />
                             <TextField
                                 fullWidth
                                 variant="filled"
@@ -61,6 +116,7 @@ const CreateComment = () => {
                             
                         </Box>
                         <Box display="flex" justifyContent="end" mt="20px">
+                        
                             <Button type="submit" color="secondary" variant="contained">
                                 Create New Comment
                             </Button>
@@ -74,11 +130,16 @@ const CreateComment = () => {
 
 
 const initialValues = {
+  name: "",
   comment: "",
+  date: moment().format("DD-MM-YYYY hh:mm:ss"),
+  user_id:1
 };
 
 const checkoutSchema = yup.object().shape({
+  name: yup.string().required("required"),
   comment: yup.string().required("required"),
+  date: yup.string().required("required"),
 });
 
 export default CreateComment;

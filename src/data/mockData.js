@@ -178,26 +178,31 @@ export const mockTransactions = [
 
 export const mockBarData = [
   {
+    comment_id: 1,
     topic: "Hotel",
     "hotel": 137,
     "hotelColor": "hsl(229, 70%, 50%)",
   },
   {
+    comment_id: 1,
     topic: "Location",
     location: 28,
     locationColor: "hsl(111, 70%, 50%)",
   },
   {
+    comment_id: 1,
     topic: "Food",
     food: 34,
     foodColor: "hsl(106, 70%, 50%)",
   },
   {
+    comment_id: 1,
     topic: "Staff",
     staff: 83,
     staffColor: "hsl(9, 70%, 50%)",
   },
   {
+    comment_id: 1,
     topic: "Others",
     "others": 81,
     "othersColor": "hsl(190, 70%, 50%)",

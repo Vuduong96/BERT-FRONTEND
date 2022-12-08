@@ -8,36 +8,62 @@ import PublishedWithChangesOutlinedIcon from '@mui/icons-material/PublishedWithC
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import Button from '@mui/material/Button';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+
+
+const baseUrl = "http://localhost:5000"
+
 
 
 const Comments = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  let navigate = useNavigate(); 
+
+
+  const [selectedRows, setSelectedRows] = useState([]);
+
+  const [commentsList, setCommentsList] = useState([]);
+  
+  // { FETCH OBJECT FROM API }
+  const fetchComments = async () => {
+    const data = await axios.get(`${baseUrl}/comments`)
+    const { comments } = data.data
+    setCommentsList(comments);
+    //console.log(data);
+  }
+
+  const routeChange = () =>{ 
+    let path = `result`; 
+    navigate(path);
+  }
+
 
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },
-    { field: "registrarId", headerName: "Registrar ID" },
     {
-      field: "name",
+      field: "Name",
       headerName: "Name",
       flex: 1,
       cellClassName: "name-column--cell",
     },
     {
-        field: "comment",
+        field: "Comment",
         headerName: "Comment",
         flex: 1,
     },
     {
-        field: "date",
+        field: "Date",
         headerName: "Date",
         flex: 1,
     },
     {
-        field: "status",
-        headerName: "Status",
+        field: "Status_topic",
+        headerName: "Status Topic",
         flex: 1,
-        renderCell: ({ row: { status }}) => {
+        renderCell: ({ row: { Status_topic }}) => {
             return (
                 <Box
                 width="60%"
@@ -46,23 +72,48 @@ const Comments = () => {
                 display="flex"
                 justifyContent="center"
                 backgroundColor={
-                    status === false
+                    Status_topic === false
                     ? colors.greenAccent[700]
                     : colors.greenAccent[500]
                 }
                 borderRadius="4px"
                 >
-                {status === true && <PublishedWithChangesOutlinedIcon />}
-                {status === false && <RotateLeftOutlinedIcon />}
+                {Status_topic === true && <PublishedWithChangesOutlinedIcon />}
+                {Status_topic === false && <RotateLeftOutlinedIcon />}
                 </Box>
             );
         },
     },
     {
-        field: "actionTopic",
+      field: "Status_sentiment",
+      headerName: "Status Sentiment",
+      flex: 1,
+      renderCell: ({ row: { Status_sentiment }}) => {
+          return (
+              <Box
+              width="60%"
+              m="0 auto"
+              p="5px"
+              display="flex"
+              justifyContent="center"
+              backgroundColor={
+                  Status_sentiment === false
+                  ? colors.greenAccent[700] 
+                  : colors.greenAccent[500]
+              }
+              borderRadius="4px"
+              >
+              {Status_sentiment === true && <PublishedWithChangesOutlinedIcon />}
+              {Status_sentiment === false && <RotateLeftOutlinedIcon />}
+              </Box>
+          );
+      },
+  },
+    {
+        field: "View_topic",
         headerName: "View Topic",
         flex: 1,
-        renderCell: ({ row: { actionTopic }}) => {
+        renderCell: ({ row: { View_topic }}) => {
             return (
                 <Box
                 width="60%"
@@ -71,24 +122,25 @@ const Comments = () => {
                 display="flex"
                 justifyContent="center"
                 backgroundColor={
-                    actionTopic === true
+                  View_topic === true
                     ? colors.greenAccent[600]
-                    : colors.redAccent[600]
+                    : colors.redAccent[400]
                 }
                 borderRadius="4px"
                 >
-                {actionTopic === true && <VisibilityOutlinedIcon />}
-                {actionTopic === false && <VisibilityOffOutlinedIcon /> }
-                <Button>View</Button>
+                {View_topic === true && <Button><VisibilityOutlinedIcon /> View</Button>}
+                {View_topic === false &&   <Button                
+                > <VisibilityOffOutlinedIcon /></Button> }
+              
                 </Box>
             );
         },
     },
     {
-        field: "actionSenti",
+        field: "View_senti",
         headerName: "View Sentiment",
         flex: 1,
-        renderCell: ({ row: { actionSenti }}) => {
+        renderCell: ({ row: { View_senti }}) => {
             return (
                 <Box
                 width="60%"
@@ -97,21 +149,55 @@ const Comments = () => {
                 display="flex"
                 justifyContent="center"
                 backgroundColor={
-                    actionSenti === true
+                  View_senti === true
                     ? colors.greenAccent[600]
-                    : colors.redAccent[600]
+                    : colors.redAccent[400]
                 }
                 borderRadius="4px"
                 >
-                {actionSenti === true && <VisibilityOutlinedIcon />}
-                {actionSenti === false && <VisibilityOffOutlinedIcon /> }
-                <Button>View</Button>
+                {View_senti === true && <Button><VisibilityOutlinedIcon /> View</Button>}
+                {View_senti === false &&   <Button> <VisibilityOffOutlinedIcon /> </Button> }
                 </Box>
             );
         },
     },
+    // {
+    //   field: 'Action',
+    //   headName: 'Action',
+    //   sortable: false,
+    //   width:100,
+    //   renderCell: (params) => {
+    //     const navigateToPredict = (e) => {
+           
+    //         navigate('/result/'+ params.row.id);
+    //       };
+  
+    //     return  <Box
+    //     width="60%"
+    //     m="0 auto"
+    //     p="5px"
+    //     display="flex"
+    //     justifyContent="center"
+    //     backgroundColor={
+    //        colors.greenAccent[400]
+    //     }
+    //     borderRadius="4px"
+    //     >
+    //     {<Button onClick={navigateToPredict}>Predict</Button> }
+    //     </Box> ;
+    //     }
+    // }
   ];
 
+
+  
+  useEffect(() => {
+    fetchComments();
+  }, [])
+
+
+
+  
   return (
     <Box m="20px">
       <Header
@@ -120,7 +206,7 @@ const Comments = () => {
       />
       <Box
         m="40px 0 0 0"
-        height="75vh"
+        height="65vh"
         sx={{
           "& .MuiDataGrid-root": {
             border: "none",
@@ -152,10 +238,38 @@ const Comments = () => {
       >
         <DataGrid
           checkboxSelection
-          rows={mockDataComments}
+          rows={commentsList}
           columns={columns}
+          onSelectionModelChange={(ids) => {
+            const selectedIDs = new Set(ids);
+            const selectedRows = commentsList.filter((row) =>
+              selectedIDs.has(row.id),
+            );
+            var newcommentList = {};
+            
+            newcommentList['comments'] = selectedRows;
+
+            //console.log(newcommentList);
+            const updateComments = async () => {
+              const data = await axios.put(`${baseUrl}/update_comments`,newcommentList);
+              console.log(data);
+            }
+
+            updateComments();
+
+          }}
         />
       </Box>
+      <Box display="flex" justifyContent="end" mt="10px" b="50px" >
+        <Button 
+        type="submit" 
+        color="secondary" 
+        variant="contained"
+        onClick={routeChange}
+        >
+              Get Result
+         </Button>
+       </Box>
     </Box>
   );
 };

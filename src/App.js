@@ -14,13 +14,9 @@ import Form from "./scenes/form";
 // import FAQ from "./scenes/faq";
 // import Geography from "./scenes/geography";
 // import Calendar from "./scenes/calendar";
-// import Topic from "./scenes/topic";
+import Result from "./scenes/result";
 // import Sentiment from "./scenes/topic";
 import CreateComment from './scenes/create_comment';
-
-
-
-
 
 
 
@@ -48,7 +44,7 @@ function App() {
             {/* <Route path="/faq" element={<FAQ />} /> */}
             {/* <Route path="/geography" element={<Geography />} /> */}
             {/* <Route path="/calendar" element={<Calendar />} /> */}
-            {/* <Route path="/topic" element={<Topic />} /> */}
+            <Route path="/comments/result" element={<Result />} />
             {/* <Route path="/sentiment" element={<Sentiment />} /> */}
             <Route path="/create_comment" element={<CreateComment />} />
           </Routes>
